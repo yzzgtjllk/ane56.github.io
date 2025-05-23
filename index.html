@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -526,65 +525,65 @@
         }
 
         function calculateShipping() {
-            尝试 {
-                常数 省 = 文件.getElementById('省').价值;
-                常数 重量 = parseFloat(文件.getElementById('重量').价值);
+            try {
+                const province = document.getElementById('province').value;
+                const weight = parseFloat(document.getElementById('weight').value);
 
-                如果 (伊斯南(重量) || 重量 <= 0) {
-                    文件.getElementById('发货结果').innerHTML = `总计运费:< span class = " result-value " >-</span > ` 1;
-                    返回;
+                if (isNaN(weight) || weight <= 0) {
+                    document.getElementById('shippingResult').innerHTML = `总计运费: <span class="result-value">--</span>`;
+                    return;
                 }
 
-                // 计算结算重量（最低5公斤)
-                常数 最终结算 = 数学.最大(5, 重量);
+                // 计算结算重量（最低5kg）
+                const finalSettlement = Math.max(5, weight);
 
                 // 获取省份价格
-                常数 普罗文斯基 = find provinces group(省);
-                如果 (!价格表[普罗文斯基]) {
-                    扔 新的 错误("暂不支持该省份运费计算");
+                const provinceKey = findProvinceGroup(province);
+                if (!priceTable[provinceKey]) {
+                    throw new Error("暂不支持该省份运费计算");
                 }
 
-                常数 数据 = 价格表[普罗文斯基];
-                常数 很特别 = 排列.伊萨雷(数据.范围[0][2]);
+                const data = priceTable[provinceKey];
+                const isSpecial = Array.isArray(data.ranges[0][2]);
 
                 // 处理价格显示
-                如果 (很特别) {
-                    常数 [最低价格, 最高价格] = 数据.范围[0][2];
-                    常数 minTotal = 最终结算 * 最低价格 + 20;
-                    常数 maxTotal = 最终结算 * 最高价格 + 20;
-                    文件.getElementById('发货结果').innerHTML = `估算运费:< span class= "结果值">${minTotal.toFixed(1)} - ${maxTotal.toFixed(1)}元</span > `;
+                if (isSpecial) {
+                    const [minPrice, maxPrice] = data.ranges[0][2];
+                    const minTotal = finalSettlement * minPrice + 20;
+                    const maxTotal = finalSettlement * maxPrice + 20;
+                    document.getElementById('shippingResult').innerHTML = `估算运费: <span class="result-value">${minTotal.toFixed(1)} - ${maxTotal.toFixed(1)} 元</span>`;
                     
-                    如果 (数据.注意) {
-                        文件.getElementById('发货结果').innerHTML += `< div style = " color:# 666；字体大小:12px上边距:5px">${数据.注意}</div>`;
+                    if (data.note) {
+                        document.getElementById('shippingResult').innerHTML += `<div style="color:#666;font-size:12px;margin-top:5px;">${data.note}</div>`;
                     }
-                } 其他 {
-                    让 价格;
-                    为 (常数 [minW, maxW, p] 关于 数据.范围) {
-                        如果 (最终结算 >= minW && 最终结算 <= maxW) {
-                            价格 = p;
-                            破裂;
+                } else {
+                    let price;
+                    for (const [minW, maxW, p] of data.ranges) {
+                        if (finalSettlement >= minW && finalSettlement <= maxW) {
+                            price = p;
+                            break;
                         }
                     }
                     
-                    如果 (价格 === 不明确的) {
-                        价格 = 数据.范围[数据.范围.长度 - 1][2];
+                    if (price === undefined) {
+                        price = data.ranges[data.ranges.length - 1][2];
                     }
 
-                    常数 总数 = 最终结算 * 价格 + 20;
-                    文件.getElementById('发货结果').innerHTML = `总计运费:< span class= "结果值">${总数.toFixed(1)}元</span > `;
+                    const total = finalSettlement * price + 20;
+                    document.getElementById('shippingResult').innerHTML = `总计运费: <span class="result-value">${total.toFixed(1)} 元</span>`;
                 }
 
-            } 捕捉 (e) {
-                文件.getElementById('发货结果').innerHTML = `< span class="result-error " >${e.消息}</span>`;
+            } catch (e) {
+                document.getElementById('shippingResult').innerHTML = `<span class="result-error">${e.message}</span>`;
             }
         }
 
         // 初始化时绑定省份变化事件
-        文件.getElementById('省').addEventListener(“改变”, 功能() {
-            如果 (文件.getElementById('重量').价值) {
-                计算运费();
+        document.getElementById('province').addEventListener('change', function() {
+            if (document.getElementById('weight').value) {
+                calculateShipping();
             }
         });
-    </脚本>
-</身体>
-</超文本标记语言>
+    </script>
+</body>
+</html>
