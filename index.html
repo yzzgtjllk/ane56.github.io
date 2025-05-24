@@ -2,588 +2,134 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>安能物流运费计算</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP运费计算器</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.5;
-            color: #333;
-            background-color: #f5f5f5;
-            padding: 10px;
-            font-size: 14px;
-        }
-        
-        .container {
-            max-width: 100%;
+            font-family: Arial, sans-serif;
+            max-width: 500px;
             margin: 0 auto;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            padding: 15px;
+            background-color: #f5f5f5;
         }
-        
         h1 {
             text-align: center;
-            padding: 15px 10px;
-            font-size: 18px;
-            background-color: #2196F3;
-            color: white;
-            margin-bottom: 0;
-        }
-        
-        .section {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .section-title {
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 15px;
             color: #333;
-            display: flex;
-            align-items: center;
+            font-size: 22px;
+            margin-bottom: 20px;
         }
-        
-        .section-title:before {
-            content: "";
-            display: inline-block;
-            width: 4px;
-            height: 16px;
-            background-color: #2196F3;
-            margin-right: 8px;
-            border-radius: 2px;
+        .calculator {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
-        .input-row {
+        .form-group {
             margin-bottom: 15px;
         }
-        
         label {
             display: block;
             margin-bottom: 5px;
-            font-weight: 500;
-            color: #666;
+            font-weight: bold;
+            color: #555;
         }
-        
-        input, select {
+        select, input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 14px;
-            background-color: #fff;
+            font-size: 16px;
+            box-sizing: border-box;
         }
-        
-        select {
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 1em;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-            text-align: center;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        
-        .btn-primary {
-            background-color: #2196F3;
-        }
-        
-        .btn-secondary {
-            background-color: #607D8B;
-        }
-        
-        .btn-success {
-            background-color: #4CAF50;
-        }
-        
         .result {
-            padding: 12px;
+            margin-top: 20px;
+            padding: 15px;
             background-color: #f9f9f9;
             border-radius: 4px;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        
-        .result-value {
-            color: #2196F3;
-        }
-        
-        .result-error {
-            color: #f44336;
-        }
-        
-        .result-success {
-            color: #4CAF50;
-        }
-        
-        .footer {
-            padding: 15px;
+            font-size: 18px;
             text-align: center;
-            background-color: #f5f5f5;
-            border-top: 1px solid #eee;
+            min-height: 20px;
         }
-        
-        .footer-btn {
-            margin-bottom: 10px;
-        }
-        
-        .footer-contact {
-            font-size: 13px;
-            color: #666;
-        }
-        
-        /* 响应式调整 */
-        @media (min-width: 768px) {
-            body {
-                padding: 20px;
-            }
-            
-            .container {
-                max-width: 600px;
-            }
-            
-            .btn {
-                width: auto;
-            }
-            
-            .footer-btn {
-                display: inline-block;
-                margin-right: 10px;
-                margin-bottom: 0;
-            }
+        .contact {
+            color: #e74c3c;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>安能物流运费计算</h1>
-        
-        <div class="section">
-            <div class="section-title">运费计算</div>
-            
-            <div class="input-row">
-                <label for="province">到达省份</label>
-                <select id="province">
-                    <option value="北京">北京</option>
-                    <option value="天津">天津</option>
-                    <option value="河北">河北</option>
-                    <option value="山东">山东</option>
-                    <option value="河南">河南</option>
-                    <option value="江苏">江苏</option>
-                    <option value="浙江">浙江</option>
-                    <option value="上海">上海</option>
-                    <option value="安徽">安徽</option>
-                    <option value="山西">山西</option>
-                    <option value="湖北">湖北</option>
-                    <option value="辽宁">辽宁</option>
-                    <option value="湖南">湖南</option>
-                    <option value="广东">广东</option>
-                    <option value="江西">江西</option>
-                    <option value="福建">福建</option>
-                    <option value="四川">四川</option>
-                    <option value="重庆">重庆</option>
-                    <option value="吉林">吉林</option>
-                    <option value="黑龙江">黑龙江</option>
-                    <option value="陕西">陕西</option>
-                    <option value="云南">云南</option>
-                    <option value="贵州">贵州</option>
-                    <option value="广西">广西</option>
-                    <option value="内蒙">内蒙</option>
-                    <option value="青海">青海</option>
-                    <option value="甘肃">甘肃</option>
-                    <option value="宁夏">宁夏</option>
-                    <option value="海南">海南</option>
-                    <option value="新疆">新疆</option>
-                    <option value="西藏">西藏</option>
-                </select>
-            </div>
-            
-            <div class="input-row">
-                <label for="weight">实际重量 (kg)</label>
-                <input type="number" id="weight" step="0.1" min="0" placeholder="请输入重量" oninput="calculateShipping()">
-            </div>
-            
-            <div class="result">
-                <div id="shippingResult">总计运费: <span class="result-value">--</span></div>
-            </div>
+    <h1>VIP运费计算器</h1>
+    <div class="calculator">
+        <div class="form-group">
+            <label for="province">目的省份:</label>
+            <select id="province">
+                <option value="30,0.5">天津</option>
+                <option value="30,0.5">河北</option>
+                <option value="30,0.6">北京</option>
+                <option value="30,0.6">山东</option>
+                <option value="30,0.6">河南</option>
+                <option value="35,0.7">内蒙（呼市、包头）</option>
+                <option value="35,0.7">辽宁</option>
+                <option value="35,0.7">山西</option>
+                <option value="35,0.7">江苏</option>
+                <option value="35,0.7">上海</option>
+                <option value="35,0.7">浙江</option>
+                <option value="35,0.8">安徽</option>
+                <option value="40,0.9">江西</option>
+                <option value="36,0.8">湖南</option>
+                <option value="36,0.8">湖北</option>
+                <option value="40,0.9">福建</option>
+                <option value="40,0.9">陕西（西安分拨）</option>
+                <option value="40,0.9">广东</option>
+                <option value="40,1">吉林（长春分拨）</option>
+                <option value="40,1">黑龙江（哈尔滨分拨）</option>
+                <option value="45,1.1">四川</option>
+                <option value="45,1.1">重庆</option>
+                <option value="50,1.4">广西（南宁分拨）</option>
+                <option value="50,1.4">云南（昆明分拨）</option>
+                <option value="50,1.5">贵州（贵阳分拨）</option>
+            </select>
         </div>
-        
-        <div class="footer">
-            <button class="btn btn-primary footer-btn" onclick="window.open('https://www.ane56.com/self-Check.html', '_blank')">单号查询</button>
-            <div class="footer-contact">服务热线: 13821805156 (微信同号)</div>
+        <div class="form-group">
+            <label for="weight">重量 (公斤):</label>
+            <input type="number" id="weight" min="1" placeholder="请输入重量" oninput="calculateShipping()">
+        </div>
+        <div id="result" class="result">
+            运费
         </div>
     </div>
-    
+
     <script>
-        // 价格表配置
-        const priceTable = {
-            "天津": {
-                "ranges": [
-                    [1, 70, 0.7],
-                    [71, 300, 0.7],
-                    [301, 500, 0.7],
-                    [501, 800, 0.7],
-                    [801, Infinity, 0.6]
-                ]
-            },
-            "河北": {
-                "ranges": [
-                    [1, 70, 0.8],
-                    [71, 300, 0.8],
-                    [301, 500, 0.8],
-                    [501, 800, 0.8],
-                    [801, Infinity, 0.7]
-                ]
-            },
-            "北京": {
-                "ranges": [
-                    [1, 70, 1.3],
-                    [71, 300, 1.2],
-                    [301, 500, 1],
-                    [501, 800, 0.9],
-                    [801, Infinity, 0.8]
-                ]
-            },
-            "山东": {
-                "ranges": [
-                    [1, 70, 1.1],
-                    [71, 300, 1],
-                    [301, 500, 0.9],
-                    [501, 800, 0.9],
-                    [801, Infinity, 0.8]
-                ]
-            },
-            "河南": {
-                "ranges": [
-                    [1, 70, 1.1],
-                    [71, 300, 1],
-                    [301, 500, 0.9],
-                    [501, 800, 0.9],
-                    [801, Infinity, 0.8]
-                ]
-            },
-            "江苏": {
-                "ranges": [
-                    [1, 70, 1.2],
-                    [71, 300, 1.1],
-                    [301, 500, 1],
-                    [501, 800, 0.9],
-                    [801, Infinity, 0.8]
-                ]
-            },
-            "浙江": {
-                "ranges": [
-                    [1, 70, 1.2],
-                    [71, 300, 1.1],
-                    [301, 500, 1],
-                    [501, 800, 0.9],
-                    [801, Infinity, 0.8]
-                ]
-            },
-            "上海": {
-                "ranges": [
-                    [1, 70, 1.2],
-                    [71, 300, 1.1],
-                    [301, 500, 1],
-                    [501, 800, 0.9],
-                    [801, Infinity, 0.8]
-                ]
-            },
-            "安徽": {
-                "ranges": [
-                    [1, 70, 1.2],
-                    [71, 300, 1.1],
-                    [301, 500, 1],
-                    [501, 800, 0.9],
-                    [801, Infinity, 0.8]
-                ]
-            },
-            "山西": {
-                "ranges": [
-                    [1, 70, 1.2],
-                    [71, 300, 1.1],
-                    [301, 500, 1],
-                    [501, 800, 0.9],
-                    [801, Infinity, 0.8]
-                ]
-            },
-            "湖北": {
-                "ranges": [
-                    [1, 70, 1.4],
-                    [71, 300, 1.3],
-                    [301, 500, 1.1],
-                    [501, 800, 1],
-                    [801, Infinity, 1]
-                ]
-            },
-            "辽宁": {
-                "ranges": [
-                    [1, 70, 1.4],
-                    [71, 300, 1.3],
-                    [301, 500, 1.1],
-                    [501, 800, 1],
-                    [801, Infinity, 1]
-                ]
-            },
-            "湖南": {
-                "ranges": [
-                    [1, 70, 1.6],
-                    [71, 300, 1.4],
-                    [301, 500, 1.3],
-                    [501, 800, 1.2],
-                    [801, Infinity, 1.1]
-                ]
-            },
-            "广东": {
-                "ranges": [
-                    [1, 70, 1.6],
-                    [71, 300, 1.4],
-                    [301, 500, 1.3],
-                    [501, 800, 1.2],
-                    [801, Infinity, 1.1]
-                ]
-            },
-            "江西": {
-                "ranges": [
-                    [1, 70, 1.6],
-                    [71, 300, 1.4],
-                    [301, 500, 1.3],
-                    [501, 800, 1.2],
-                    [801, Infinity, 1.1]
-                ]
-            },
-            "福建": {
-                "ranges": [
-                    [1, 70, 1.6],
-                    [71, 300, 1.4],
-                    [301, 500, 1.3],
-                    [501, 800, 1.2],
-                    [801, Infinity, 1.1]
-                ]
-            },
-            "四川": {
-                "ranges": [
-                    [1, 70, 1.8],
-                    [71, 300, 1.6],
-                    [301, 500, 1.5],
-                    [501, 800, 1.4],
-                    [801, Infinity, 1.2]
-                ]
-            },
-            "重庆": {
-                "ranges": [
-                    [1, 70, 1.8],
-                    [71, 300, 1.6],
-                    [301, 500, 1.5],
-                    [501, 800, 1.4],
-                    [801, Infinity, 1.2]
-                ]
-            },
-            "吉林": {
-                "ranges": [
-                    [1, 70, 1.8],
-                    [71, 300, 1.6],
-                    [301, 500, 1.5],
-                    [501, 800, 1.4],
-                    [801, Infinity, 1.2]
-                ]
-            },
-            "黑龙江": {
-                "ranges": [
-                    [1, 70, 1.8],
-                    [71, 300, 1.6],
-                    [301, 500, 1.5],
-                    [501, 800, 1.4],
-                    [801, Infinity, 1.2]
-                ]
-            },
-            "陕西": {
-                "ranges": [
-                    [1, 70, 1.8],
-                    [71, 300, 1.6],
-                    [301, 500, 1.5],
-                    [501, 800, 1.4],
-                    [801, Infinity, 1.2]
-                ]
-            },
-            "云南": {
-                "ranges": [
-                    [1, 70, 2.2],
-                    [71, 300, 2],
-                    [301, 500, 1.8],
-                    [501, 800, 1.7],
-                    [801, Infinity, 1.1]
-                ]
-            },
-            "贵州": {
-                "ranges": [
-                    [1, 70, 2.2],
-                    [71, 300, 2],
-                    [301, 500, 1.8],
-                    [501, 800, 1.7],
-                    [801, Infinity, 1.1]
-                ]
-            },
-            "广西": {
-                "ranges": [
-                    [1, 70, 2.2],
-                    [71, 300, 2],
-                    [301, 500, 1.8],
-                    [501, 800, 1.7],
-                    [801, Infinity, 1.1]
-                ]
-            },
-            "内蒙": {
-                "ranges": [[1, Infinity, [1.6, 3.2]]],
-                "note": "价格浮动较大，请咨询网点确认"
-            },
-            "青海": {
-                "ranges": [[1, Infinity, [3, 3.5]]],
-                "note": "价格浮动较大，请咨询网点确认"
-            },
-            "甘肃": {
-                "ranges": [[1, Infinity, [3, 3.5]]],
-                "note": "价格浮动较大，请咨询网点确认"
-            },
-            "宁夏": {
-                "ranges": [[1, Infinity, [3, 3.5]]],
-                "note": "价格浮动较大，请咨询网点确认"
-            },
-            "海南": {
-                "ranges": [[1, Infinity, [3, 3.5]]],
-                "note": "价格浮动较大，请咨询网点确认"
-            },
-            "新疆": {
-                "ranges": [[1, Infinity, [3.5, 3.5]]],
-                "note": "价格浮动较大，请咨询网点确认"
-            },
-            "西藏": {
-                "ranges": [[1, Infinity, [3.5, 10]]],
-                "note": "价格浮动较大，请咨询网点确认"
-            }
-        };
-
-        // 省份分组映射
-        const provinceGroups = {
-            "山东": ["山东"],
-            "河南": ["河南"],
-            "江苏": ["江苏"],
-            "浙江": ["浙江"],
-            "上海": ["上海"],
-            "安徽": ["安徽"],
-            "山西": ["山西"],
-            "湖北": ["湖北"],
-            "辽宁": ["辽宁"],
-            "湖南": ["湖南"],
-            "广东": ["广东"],
-            "江西": ["江西"],
-            "福建": ["福建"],
-            "四川": ["四川"],
-            "重庆": ["重庆"],
-            "吉林": ["吉林"],
-            "黑龙江": ["黑龙江"],
-            "陕西": ["陕西"],
-            "云南": ["云南"],
-            "贵州": ["贵州"],
-            "广西": ["广西"],
-            "青海": ["青海"],
-            "甘肃": ["甘肃"],
-            "宁夏": ["宁夏"],
-            "海南": ["海南"],
-            "新疆": ["新疆"]
-        };
-
-        function findProvinceGroup(userProvince) {
-            for (const group in provinceGroups) {
-                if (provinceGroups[group].includes(userProvince)) {
-                    return group;
-                }
-            }
-            return userProvince;
-        }
-
         function calculateShipping() {
-            try {
-                const province = document.getElementById('province').value;
-                const weight = parseFloat(document.getElementById('weight').value);
-
-                if (isNaN(weight) || weight <= 0) {
-                    document.getElementById('shippingResult').innerHTML = `总计运费: <span class="result-value">--</span>`;
-                    return;
-                }
-
-                // 计算结算重量（最低5kg）
-                const finalSettlement = Math.max(5, weight);
-
-                // 获取省份价格
-                const provinceKey = findProvinceGroup(province);
-                if (!priceTable[provinceKey]) {
-                    throw new Error("暂不支持该省份运费计算");
-                }
-
-                const data = priceTable[provinceKey];
-                const isSpecial = Array.isArray(data.ranges[0][2]);
-
-                // 处理价格显示
-                if (isSpecial) {
-                    const [minPrice, maxPrice] = data.ranges[0][2];
-                    const minTotal = finalSettlement * minPrice + 20;
-                    const maxTotal = finalSettlement * maxPrice + 20;
-                    document.getElementById('shippingResult').innerHTML = `估算运费: <span class="result-value">${minTotal.toFixed(1)} - ${maxTotal.toFixed(1)} 元</span>`;
-                    
-                    if (data.note) {
-                        document.getElementById('shippingResult').innerHTML += `<div style="color:#666;font-size:12px;margin-top:5px;">${data.note}</div>`;
-                    }
-                } else {
-                    let price;
-                    for (const [minW, maxW, p] of data.ranges) {
-                        if (finalSettlement >= minW && finalSettlement <= maxW) {
-                            price = p;
-                            break;
-                        }
-                    }
-                    
-                    if (price === undefined) {
-                        price = data.ranges[data.ranges.length - 1][2];
-                    }
-
-                    const total = finalSettlement * price + 20;
-                    document.getElementById('shippingResult').innerHTML = `总计运费: <span class="result-value">${total.toFixed(1)} 元</span>`;
-                }
-
-            } catch (e) {
-                document.getElementById('shippingResult').innerHTML = `<span class="result-error">${e.message}</span>`;
+            const province = document.getElementById('province').value;
+            const weightInput = document.getElementById('weight');
+            const weight = parseFloat(weightInput.value);
+            const resultDiv = document.getElementById('result');
+            
+            if (isNaN(weight) || weight <= 0) {
+                resultDiv.innerHTML = "运费";
+                return;
             }
+            
+            if (weight > 300) {
+                resultDiv.innerHTML = '重量超过300公斤，请咨询站点: <span class="contact">13821805156</span>';
+                return;
+            }
+            
+            const [firstWeightPrice, additionalPrice] = province.split(',').map(Number);
+            let shippingCost;
+            
+            if (weight <= 20) {
+                shippingCost = firstWeightPrice;
+            } else {
+                // 新计算方式：20公斤以内按首重价格，超过部分按单价计算
+                shippingCost = firstWeightPrice + additionalPrice * (weight - 20);
+            }
+            
+            resultDiv.innerHTML = `运费: ¥${shippingCost.toFixed(2)}`;
         }
-
-        // 初始化时绑定省份变化事件
-        document.getElementById('province').addEventListener('change', function() {
-            if (document.getElementById('weight').value) {
-                calculateShipping();
-            }
-        });
+        
+        // Also calculate when province changes
+        document.getElementById('province').addEventListener('change', calculateShipping);
     </script>
 </body>
 </html>
